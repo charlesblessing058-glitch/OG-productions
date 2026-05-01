@@ -18,6 +18,8 @@ class MpesaAPI:
         
     def get_access_token(self):
         """Generate OAuth2 access token"""
+        if not self.consumer_key or not self.consumer_secret:
+            return None
         api_url = f"{self.base_url}/oauth/v1/generate?grant_type=client_credentials"
         response = requests.get(api_url, auth=(self.consumer_key, self.consumer_secret))
         if response.status_code == 200:

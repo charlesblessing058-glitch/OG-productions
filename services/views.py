@@ -116,7 +116,7 @@ def submit_request(request):
             )
             
             if is_ajax:
-                return JsonResponse({'success': True, 'request_id': str(new_req.id)})
+                return JsonResponse({'success': True, 'request_id': str(new_req.pk)})
             messages.success(request, f'✅ Request for "{service.name}" submitted!')
             return redirect('home')
         except Exception as e:
@@ -190,7 +190,7 @@ def initiate_mpesa_payment(request, request_id):
             "TransactionType": "CustomerPayBillOnline", "Amount": amount, "PartyA": phone,
             "PartyB": MPESA_SHORTCODE, "PhoneNumber": phone,
             "CallBackURL": "https://example.com/callback/", 
-            "AccountReference": f"OG{service_request.id}", "TransactionDesc": f"Pay{service_request.id}"
+            "AccountReference": f"OG{service_request.pk}", "TransactionDesc": f"Pay{service_request.pk}"
         }
         
         headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
@@ -319,7 +319,7 @@ def get_notifications(request):
     notifications = Notification.objects.filter(user=request.user, is_read=False)[:5]
     return JsonResponse({
         'count': Notification.objects.filter(user=request.user, is_read=False).count(),
-        'items': [{'id': n.id, 'title': n.title, 'message': n.message, 'time': n.created_at.strftime('%I:%M %p')} for n in notifications]
+        'items': [{'id': n.pk, 'title': n.title, 'message': n.message, 'time': n.created_at.strftime('%I:%M %p')} for n in notifications]
     })
 
 @login_required
@@ -456,3 +456,17 @@ def temp_create_admin(request):
         return HttpResponse("✅ Admin already exists! Go to /login/ and sign in.")
     User.objects.create_superuser('admin', 'admin@ogproductions.com', 'TempPass123!')
     return HttpResponse("🎉 SUCCESS! Admin created.<br>Username: <b>admin</b><br>Password: <b>TempPass123!</b><br>⚠️ LOGIN NOW, THEN DELETE THIS TEMPORARY ROUTE FROM urls.py & views.py!")
+# === TEMPORARY PLACEHOLDER VIEWS (for deployment) ===
+from django.shortcuts import redirect
+
+def client_login(request):
+    """Temporary login placeholder - redirects to home"""
+    return redirect('home')
+
+def client_register(request):
+    """Temporary register placeholder - redirects to home"""
+    return redirect('home')
+
+def client_logout(request):
+    """Temporary logout placeholder - redirects to home"""
+    return redirect('home')

@@ -10,15 +10,20 @@ class SMSNotifier:
         self.username = os.getenv('AFRICASTALKING_USERNAME', 'sandbox')
         self.api_key = os.getenv('AFRICASTALKING_API_KEY', '')
         self.sender_id = os.getenv('SENDER_ID', 'OGProds')
+        self.sms = None
         
         # Initialize Africa's Talking
         if self.api_key:
-            africastalking.initialize(self.username, self.api_key)
-            self.sms = africastalking.SMS
+            try:
+                africastalking.initialize(self.username, self.api_key)
+                self.sms = africastalking.SMS
+            except Exception as e:
+                print(f"⚠️ Failed to initialize SMS service: {e}")
+                self.sms = None
     
     def send_sms(self, phone_number, message):
         """Send SMS to client"""
-        if not self.api_key:
+        if not self.api_key or not self.sms:
             print(f"📱 SMS Mock: Would send to {phone_number}: {message}")
             return {'status': 'mock', 'message': 'SMS sent (mock mode)'}
         

@@ -1,5 +1,6 @@
 ﻿from django.db import models
 from django.contrib.auth.models import User
+from decimal import Decimal
 
 # Choices
 STATUS_CHOICES = [
@@ -66,7 +67,7 @@ class ServiceRequest(models.Model):
     mpesa_checkout_id = models.CharField(max_length=100, blank=True, null=True)
     mpesa_receipt_number = models.CharField(max_length=100, blank=True, null=True)
     mpesa_phone = models.CharField(max_length=20, blank=True, null=True)
-    mpesa_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    mpesa_amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     
     # Admin Delivery Fields
     admin_notes = models.TextField(blank=True, null=True, help_text='Admin delivery notes')
@@ -99,7 +100,8 @@ class Notification(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.title} ({self.user.username})"
+        username = self.user.username if self.user else "Anonymous"
+        return f"{self.title} ({username})"
 
 
 class PortfolioItem(models.Model):
