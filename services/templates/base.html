@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Original Grand Productions{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 
+                        primary: '#2563eb',
+                        secondary: '#7c3aed',
+                        dark: '#0f172a',
+                        card: '#1e293b'
+                    },
+                    animation: { 
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: 0 }, '100%': { opacity: 1 } },
+                        slideUp: { '0%': { transform: 'translateY(10px)', opacity: 0 }, '100%': { transform: 'translateY(0)', opacity: 1 } }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .dark .glass { background: rgba(30,41,59,0.5); border-color: rgba(255,255,255,0.1); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
+        .dark .card-hover:hover { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-dark dark:to-gray-900 text-gray-900 dark:text-white min-h-screen flex flex-col transition-colors duration-300">
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-card/90 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="{% url 'home' %}" class="flex items-center gap-3 group">
+                    {% if site_settings and site_settings.logo %}
+                        <img src="{{ site_settings.logo.url }}" alt="Logo" class="h-10 w-auto rounded-lg shadow-md group-hover:scale-105 transition">
+                    {% else %}
+                        <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:shadow-primary/50 transition">OG</div>
+                    {% endif %}
+                    <span class="font-bold text-lg hidden sm:block bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">{{ site_settings.site_name|default:"Original Grand Productions" }}</span>
+                </a>
+                
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center gap-1">
+                    {% for item in nav_items %}
+                    <a href="{{ item.url }}" class="px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 transition">{{ item.get_display_text }}</a>
+                    {% endfor %}
+                </div>
+                
+                <!-- Right Actions -->
+                <div class="flex items-center gap-2">
+                    <!-- 🔔 Dark Mode Toggle -->
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition" title="Toggle Dark Mode">
+                        <i id="darkIcon" class="fas fa-moon text-gray-600 dark:text-yellow-400 text-lg"></i>
+                    </button>
+                    
+                    {% if user.is_authenticated %}
+                        <!-- 🔔 Notification Bell (FOR ALL USERS INCLUDING ADMIN) -->
+                        <div class="relative">
+                            <button onclick="toggleNotifications()" class="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition animate-fade-in" title="Notifications">
+                                <i class="fas fa-bell text-gray-600 dark:text-gray-300 text-lg"></i>
+                                <span id="notifBadge" class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 border-2 border-white dark:border-card rounded-full hidden animate-pulse"></span>
+                            </button>
+                            <div id="notifDropdown" class="hidden absolute right-0 top-12 w-80 bg-white dark:bg-card rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-slide-up">
+                                <div class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-primary/10 to-secondary/10 dark:from-primary/20 dark:to-secondary/20">
+                                    <span class="font-semibold text-sm text-gray-700 dark:text-gray-200">🔔 Notifications</span>
+                                </div>
+                                <div id="notifList" class="max-h-72 overflow-y-auto"></div>
+                                <div class="p-3 border-t border-gray-200 dark:border-gray-700 text-center bg-gray-50 dark:bg-gray-800/50">
+                                    <button onclick="fetchNotifications(); document.getElementById('notifDropdown').classList.add('hidden')" class="text-xs text-primary hover:underline font-medium">Refresh</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Admin Link -->
+                        {% if user.is_superuser %}
+                        <a href="{% url 'admin_panel' %}" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-primary/30 transition transform hover:-translate-y-0.5">Admin</a>
+                        {% endif %}
+                        
+                        <!-- User Menu -->
+                        <div class="relative group">
+                            <button class="flex items-center gap-2 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                                <div class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-sm shadow">
+                                    {{ user.username|first|upper }}
+                                </div>
+                            </button>
+                            <div class="absolute right-0 top-12 w-48 bg-white dark:bg-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                                <a href="{% url 'home' %}" class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-xl">🏠 Dashboard</a>
+                                <a href="{% url 'logout' %}" class="block px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-b-xl">🚪 Logout</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition">Login</a>
+                        <a href="{% url 'register' %}" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-primary/30 transition">Get Started</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white/80 dark:bg-card/80 backdrop-blur-xl border-t border-gray-200/50 dark:border-gray-700/50 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                &copy; {% now "Y" %} <span class="font-semibold">{{ site_settings.site_name|default:"Original Grand Productions" }}</span>. All rights reserved.
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">Crafted with ❤️ for creative excellence</p>
+        </div>
+    </footer>
+
+    <!-- Toast Messages -->
+    {% if messages %}
+    <div class="fixed bottom-4 right-4 z-50 space-y-2 max-w-sm">
+        {% for msg in messages %}
+        <div class="p-4 rounded-2xl shadow-2xl border animate-fade-in {% if 'success' in msg.tags %}bg-gradient-to-r from-green-500 to-emerald-600 text-white border-green-400{% elif 'error' in msg.tags %}bg-gradient-to-r from-red-500 to-rose-600 text-white border-red-400{% else %}bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-blue-400{% endif %}">
+            <div class="flex items-start gap-3">
+                <i class="fas {% if 'success' in msg.tags %}fa-check-circle{% elif 'error' in msg.tags %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} text-lg mt-0.5"></i>
+                <p class="text-sm font-medium flex-1">{{ msg }}</p>
+                <button onclick="this.closest('div').remove()" class="text-white/80 hover:text-white transition">&times;</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- JavaScript -->
+    <script>
+    // ===== DARK MODE TOGGLE =====
+    function toggleDarkMode() {
+        const html = document.documentElement;
+        const icon = document.getElementById('darkIcon');
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+            icon.className = 'fas fa-moon text-gray-600 dark:text-yellow-400 text-lg';
+        } else {
+            html.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+            icon.className = 'fas fa-sun text-yellow-500 text-lg';
+        }
+    }
+    // Load saved theme
+    document.addEventListener('DOMContentLoaded', () => {
+        const saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (saved === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.getElementById('darkIcon').className = 'fas fa-sun text-yellow-500 text-lg';
+        }
+    });
+
+    // ===== NOTIFICATIONS =====
+    function toggleNotifications() {
+        const dd = document.getElementById('notifDropdown');
+        if (!dd) return;
+        dd.classList.toggle('hidden');
+        if (!dd.classList.contains('hidden')) fetchNotifications();
+    }
+    function fetchNotifications() {
+        fetch('/api/notifications/')
+            .then(r => r.json())
+            .then(data => {
+                const badge = document.getElementById('notifBadge');
+                const list = document.getElementById('notifList');
+                if (!badge || !list) return;
+                badge.classList.toggle('hidden', data.count === 0);
+                if (!data.items || data.items.length === 0) {
+                    list.innerHTML = '<div class="p-6 text-center text-gray-500 dark:text-gray-400"><i class="fas fa-bell-slash text-3xl mb-2 opacity-50"></i><p class="text-sm">No new notifications</p></div>';
+                    return;
+                }
+                list.innerHTML = data.items.map(n => `
+                    <div class="p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition group" onclick="markRead(${n.id})">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 dark:from-primary/30 dark:to-secondary/30 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-bell text-primary dark:text-primary/80 text-sm"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary transition">\${n.title}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">\${n.message}</p>
+                                <p class="text-xs text-gray-400 mt-2">\${n.time}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            })
+            .catch(err => console.log('Notification check:', err));
+    }
+    function markRead(id) {
+        const csrf = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+        if (!csrf) return;
+        fetch('/api/notifications/' + id + '/read/', {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrf, 'Content-Type': 'application/json'}
+        }).then(() => {
+            document.getElementById('notifDropdown')?.classList.add('hidden');
+            fetchNotifications();
+        });
+    }
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        const dd = document.getElementById('notifDropdown');
+        const btn = e.target.closest('button[onclick*="toggleNotifications"]');
+        if (dd && !dd.classList.contains('hidden') && !btn && !dd.contains(e.target)) {
+            dd.classList.add('hidden');
+        }
+    });
+    // Auto-check every 20 seconds
+    setInterval(fetchNotifications, 20000);
+    // Initial check
+    document.addEventListener('DOMContentLoaded', fetchNotifications);
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

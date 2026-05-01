@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M-Pesa Payment - OG Productions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .mpesa-logo { width: 120px; margin: 0 auto; display: block; }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <div class="card mx-auto shadow text-center" style="max-width: 500px;">
+        <div class="card-body p-5">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" 
+                 alt="M-Pesa" class="mpesa-logo mb-3 pulse">
+            
+            <h2 class="text-success mb-3">M-Pesa Payment Request</h2>
+            
+            <div class="mb-4">
+                <p class="mb-1"><strong>Request ID:</strong> {{ request.id }}</p>
+                <p class="mb-1"><strong>Service:</strong> {{ request.service.name }}</p>
+                <p class="mb-3"><strong>Amount:</strong> <span class="fs-4 text-success fw-bold">KES {{ request.service.price }}</span></p>
+            </div>
+            
+            <div class="alert alert-info">
+                <p class="mb-2"><strong>📱 Check your phone!</strong></p>
+                <p class="small mb-0">We've sent an M-Pesa prompt to <strong>{{ request.client_phone }}</strong>. Enter your M-Pesa PIN to complete payment.</p>
+            </div>
+            
+            <div class="mb-3">
+                <div class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2 text-muted">Waiting for payment confirmation...</p>
+            </div>
+            
+            <button onclick="checkStatus()" class="btn btn-outline-success mb-2">Check Status</button>
+            <a href="/" class="btn btn-link">Back to Home</a>
+        </div>
+    </div>
+</div>
+
+<script>
+const requestId = "{{ request.id }}";
+
+function checkStatus() {
+    fetch(`/mpesa/status/${requestId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'paid') {
+                window.location.href = `/payment/success/?request_id=${requestId}`;
+            } else if (data.status === 'failed') {
+                alert('Payment failed or cancelled. Please try again.');
+                window.location.href = '/';
+            } else {
+                alert('Payment still pending. Please check your phone and enter your M-Pesa PIN.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error checking payment status. Please try again.');
+        });
+}
+
+// Auto-check every 5 seconds
+setInterval(checkStatus, 5000);
+</script>
+</body>
+</html>

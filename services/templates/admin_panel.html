@@ -1,0 +1,331 @@
+﻿{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">🎬 OG Admin Dashboard</h1>
+        <p class="text-gray-600 dark:text-gray-400 mt-1">Manage your creative business with ease</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white dark:bg-card rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Services</p>
+                    <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1">{{ services.count }}</p>
+                </div>
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-layer-group text-xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-card rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Active Requests</p>
+                    <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1">{{ all_requests|length }}</p>
+                </div>
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-tasks text-xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-card rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Completed</p>
+                    <p class="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">{{ completed_requests }}</p>
+                </div>
+                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-check-circle text-xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-card rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Revenue</p>
+                    <p class="text-3xl font-bold text-primary mt-1">KES {{ total_revenue|floatformat:0 }}</p>
+                </div>
+                <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-coins text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="bg-white dark:bg-card rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden mb-6">
+        <div class="flex border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
+            <button onclick="switchTab('services')" id="tab-services" class="tab-btn px-6 py-4 text-sm font-semibold text-primary border-b-2 border-primary bg-primary/5 dark:bg-primary/10 transition">🎨 Services</button>
+            <button onclick="switchTab('requests')" id="tab-requests" class="tab-btn px-6 py-4 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-primary transition">📋 Requests</button>
+            <button onclick="switchTab('users')" id="tab-users" class="tab-btn px-6 py-4 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-primary transition">👥 Users</button>
+            <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-6 py-4 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-primary transition">⚙️ Settings</button>
+            <button onclick="switchTab('portfolio')" id="tab-portfolio" class="tab-btn px-6 py-4 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-primary transition">🖼️ Portfolio</button>
+        </div>
+    </div>
+
+    <!-- Tab Contents -->
+    <div class="space-y-6">
+        <!-- Services Tab -->
+        <div id="services" class="tab-content">
+            <div class="bg-white dark:bg-card rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                    <h3 class="font-bold text-lg text-gray-900 dark:text-white">Service Catalog</h3>
+                    <button onclick="openServiceModal()" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-primary/30 transition flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Add Service
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 dark:bg-gray-800/50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Service</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Price</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-4 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                            {% for s in services %}
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                                <td class="px-6 py-4">
+                                    <div class="font-semibold text-gray-900 dark:text-white">{{ s.name }}</div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400">{{ s.description|truncatewords:10 }}</div>
+                                </td>
+                                <td class="px-6 py-4 font-bold text-primary">KES {{ s.price }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="px-3 py-1 text-xs font-medium rounded-full {% if s.is_active %}bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400{% else %}bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-400{% endif %}">
+                                        {{ s.is_active|yesno:"Active,Inactive" }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button onclick="openServiceModal({{ s.id }}, '{{ s.name|escapejs }}', '{{ s.description|escapejs }}', {{ s.price }})" class="text-blue-600 hover:text-blue-800 font-medium mr-3 transition">Edit</button>
+                                    <a href="{% url 'delete_service' s.id %}" class="text-red-600 hover:text-red-800 font-medium transition" onclick="return confirm('Delete this service?')">Delete</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">No services yet. Add your first one!</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Requests Tab -->
+        <div id="requests" class="tab-content hidden">
+            <div class="bg-white dark:bg-card rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                    <h3 class="font-bold text-lg text-gray-900 dark:text-white">Client Requests</h3>
+                    <form method="POST" action="{% url 'clear_all_requests' %}" onsubmit="return confirm('⚠️ Delete ALL requests? This cannot be undone!')">
+                        {% csrf_token %}
+                        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-xl text-sm font-semibold hover:bg-red-700 transition flex items-center gap-2">
+                            <i class="fas fa-trash"></i> Clear All
+                        </button>
+                    </form>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 dark:bg-gray-800/50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Client</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Service</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Status</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Payment</th>
+                                <th class="px-6 py-4 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                            {% for r in all_requests %}
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                                <td class="px-6 py-4">
+                                    <div class="font-semibold text-gray-900 dark:text-white">{{ r.user.get_full_name|default:r.client_name }}</div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400">{{ r.client_email }}</div>
+                                </td>
+                                <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ r.service.name }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="px-3 py-1 text-xs font-medium rounded-full {% if r.status == 'completed' %}bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400{% elif r.status == 'processing' %}bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400{% else %}bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400{% endif %}">
+                                        {{ r.status|title }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="px-3 py-1 text-xs font-medium rounded-full {% if r.payment_status == 'paid' %}bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400{% else %}bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400{% endif %}">
+                                        {{ r.payment_status|title }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    {% if r.status != 'completed' %}
+                                    <button onclick="openCompleteModal('{{ r.id }}', '{{ r.service.name }}')" class="text-green-600 hover:text-green-800 font-medium transition flex items-center gap-1 justify-end">
+                                        <i class="fas fa-check-circle"></i> Complete
+                                    </button>
+                                    {% else %}
+                                    <span class="text-gray-400 text-sm">Done</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="5" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">No requests yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users, Settings, Portfolio tabs would go here (abbreviated for brevity) -->
+        <div id="users" class="tab-content hidden">
+            <div class="bg-white dark:bg-card rounded-2xl p-8 text-center shadow-lg border border-gray-100 dark:border-gray-700">
+                <i class="fas fa-users text-4xl text-gray-400 mb-3"></i>
+                <p class="text-gray-600 dark:text-gray-400">User management coming soon!</p>
+            </div>
+        </div>
+        <div id="settings" class="tab-content hidden">
+            <div class="bg-white dark:bg-card rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
+                <h3 class="font-bold text-lg mb-4 text-gray-900 dark:text-white">Brand Settings</h3>
+                <form method="POST" enctype="multipart/form-data" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Site Name</label>
+                            <input type="text" name="site_name" value="{{ site_settings.site_name }}" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Contact Email</label>
+                            <input type="email" name="contact_email" value="{{ site_settings.contact_email }}" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone</label>
+                            <input type="text" name="contact_phone" value="{{ site_settings.contact_phone }}" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Location</label>
+                            <input type="text" name="location" value="{{ site_settings.location }}" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">About Title</label>
+                        <input type="text" name="about_title" value="{{ site_settings.about_title }}" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">About Content</label>
+                        <textarea name="about_content" rows="3" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary">{{ site_settings.about_content }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Logo</label>
+                        {% if site_settings.logo %}
+                        <img src="{{ site_settings.logo.url }}" class="h-16 mb-2 rounded-lg">
+                        {% endif %}
+                        <input type="file" name="logo" accept="image/*" class="w-full text-sm text-gray-500">
+                    </div>
+                    <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/30 transition">Save Changes</button>
+                </form>
+            </div>
+        </div>
+        <div id="portfolio" class="tab-content hidden">
+            <div class="bg-white dark:bg-card rounded-2xl p-8 text-center shadow-lg border border-gray-100 dark:border-gray-700">
+                <i class="fas fa-images text-4xl text-gray-400 mb-3"></i>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Manage your portfolio in the dedicated section.</p>
+                <a href="{% url 'admin_portfolio' %}" class="px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 transition">Go to Portfolio Manager →</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Service Modal (same as before, abbreviated) -->
+<div id="serviceModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-card rounded-2xl shadow-2xl w-full max-w-lg p-6">
+        <h3 class="text-lg font-bold mb-4 text-gray-900 dark:text-white" id="serviceModalTitle">Add Service</h3>
+        <form id="serviceForm" method="POST" class="space-y-4">
+            {% csrf_token %}
+            <input type="hidden" id="serviceId">
+            <input type="text" id="serviceName" name="name" placeholder="Service Name *" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700">
+            <textarea id="serviceDesc" name="description" placeholder="Description" rows="3" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700"></textarea>
+            <input type="number" id="servicePrice" name="price" placeholder="Price (KES) *" step="0.01" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700">
+            <div class="flex gap-3">
+                <button type="button" onclick="closeServiceModal()" class="flex-1 py-2 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancel</button>
+                <button type="submit" class="flex-1 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold hover:shadow-lg transition">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Complete Modal -->
+<div id="completeModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-card rounded-2xl shadow-2xl w-full max-w-lg p-6">
+        <h3 class="text-lg font-bold mb-4 text-gray-900 dark:text-white">✅ Mark as Completed</h3>
+        <form id="completeForm" method="POST" class="space-y-4">
+            {% csrf_token %}
+            <input type="hidden" id="completeReqId">
+            <textarea name="admin_notes" placeholder="Delivery notes for client..." rows="3" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700"></textarea>
+            <input type="url" name="delivery_link" placeholder="https://link-to-completed-work" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700">
+            <div class="flex gap-3">
+                <button type="button" onclick="closeCompleteModal()" class="flex-1 py-2 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancel</button>
+                <button type="submit" class="flex-1 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:shadow-lg transition">Send to Client</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Tab Switching
+function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('text-primary', 'border-primary', 'bg-primary/5', 'dark:bg-primary/10');
+        btn.classList.add('text-gray-600', 'dark:text-gray-400');
+    });
+    document.getElementById(tab).classList.remove('hidden');
+    const activeBtn = document.getElementById('tab-'+tab);
+    activeBtn.classList.add('text-primary', 'border-primary', 'bg-primary/5', 'dark:bg-primary/10');
+    activeBtn.classList.remove('text-gray-600', 'dark:text-gray-400');
+}
+
+// Service Modal
+function openServiceModal(id=null, name='', desc='', price='') {
+    const modal = document.getElementById('serviceModal');
+    const title = document.getElementById('serviceModalTitle');
+    const form = document.getElementById('serviceForm');
+    if (id) {
+        title.textContent = 'Edit Service';
+        document.getElementById('serviceId').value = id;
+        document.getElementById('serviceName').value = name;
+        document.getElementById('serviceDesc').value = desc;
+        document.getElementById('servicePrice').value = price;
+        form.action = '/admin-panel/service/'+id+'/edit/';
+    } else {
+        title.textContent = 'Add Service';
+        document.getElementById('serviceId').value = '';
+        document.getElementById('serviceName').value = '';
+        document.getElementById('serviceDesc').value = '';
+        document.getElementById('servicePrice').value = '';
+        form.action = '/admin-panel/service/add/';
+    }
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+function closeServiceModal() {
+    document.getElementById('serviceModal').classList.add('hidden');
+    document.getElementById('serviceModal').classList.remove('flex');
+}
+
+// Complete Modal
+function openCompleteModal(reqId, serviceName) {
+    document.getElementById('completeReqId').value = reqId;
+    document.getElementById('completeForm').action = '/admin-panel/request/'+reqId+'/complete/';
+    document.getElementById('completeModal').classList.remove('hidden');
+    document.getElementById('completeModal').classList.add('flex');
+}
+function closeCompleteModal() {
+    document.getElementById('completeModal').classList.add('hidden');
+    document.getElementById('completeModal').classList.remove('flex');
+}
+
+// Close modals on outside click
+document.getElementById('serviceModal')?.addEventListener('click', e => { if(e.target===e.currentTarget) closeServiceModal(); });
+document.getElementById('completeModal')?.addEventListener('click', e => { if(e.target===e.currentTarget) closeCompleteModal(); });
+</script>
+{% endblock %}

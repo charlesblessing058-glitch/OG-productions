@@ -1,0 +1,25 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">👋 Hello, {{ client_name }}</h1>
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+        <table class="w-full">
+            <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr><th class="px-4 py-2 text-left text-xs uppercase">Service</th><th class="px-4 py-2 text-left text-xs uppercase">Status</th><th class="px-4 py-2 text-left text-xs uppercase">Payment</th><th class="px-4 py-2 text-left text-xs uppercase">Date</th></tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                {% for r in requests %}
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td class="px-4 py-2 font-medium">{{ r.service.name }}</td>
+                    <td class="px-4 py-2"><span class="px-2 py-0.5 text-xs rounded-full {% if r.status == 'completed' %}bg-green-100 text-green-800{% elif r.status == 'processing' %}bg-yellow-100 text-yellow-800{% else %}bg-blue-100 text-blue-800{% endif %}">{{ r.status }}</span></td>
+                    <td class="px-4 py-2"><span class="px-2 py-0.5 text-xs rounded-full {% if r.payment_status == 'paid' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">{{ r.payment_status }}</span></td>
+                    <td class="px-4 py-2 text-sm text-gray-500">{{ r.created_at|date:"M d, Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">No requests yet. <a href="{% url 'home' %}" class="text-primary">Browse services</a></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

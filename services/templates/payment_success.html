@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - OG Productions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0">💳 Complete Payment</h4>
+                </div>
+                <div class="card-body p-4">
+                    {% if messages %}
+                        {% for msg in messages %}
+                            <div class="alert alert-{{ msg.tags }}">{{ msg }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <div class="text-center mb-4">
+                        <h5>Service: <strong>{{ request.service.name }}</strong></h5>
+                        <h3 class="text-primary mt-3">KES {{ request.service.price }}</h3>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <p class="mb-2"><strong>Payment Options:</strong></p>
+                        <ul class="mb-0">
+                            <li>📱 M-Pesa (Lipa Na M-Pesa)</li>
+                            <li>💳 Credit/Debit Card</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success btn-lg" type="button">
+                            📱 Pay with M-Pesa
+                        </button>
+                        <button class="btn btn-primary btn-lg" type="button">
+                            💳 Pay with Card
+                        </button>
+                        <a href="{% url 'client_dashboard' %}" class="btn btn-outline-secondary">
+                            Skip for Now
+                        </a>
+                    </div>
+                    
+                    <p class="text-muted text-center mt-3 small">
+                        🔒 Secure payment processing
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

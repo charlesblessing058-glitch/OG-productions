@@ -1,0 +1,13 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4">
+    <div class="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+        <div class="text-center mb-8">
+            {% if site_settings and site_settings.logo %}<img src="{{ site_settings.logo.url }}" class="w-16 h-16 mx-auto rounded-xl mb-4 object-cover">{% else %}<div class="w-16 h-16 mx-auto bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-2xl mb-4">OG</div>{% endif %}
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{% block form_title %}Welcome Back{% endblock %}</h2>
+        </div>
+        <form method="POST" class="space-y-4">{% csrf_token %}{{ form.as_p }}<button type="submit" class="w-full px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-700">{% block btn_text %}Sign In{% endblock %}</button></form>
+        <p class="text-center text-sm text-gray-500 mt-6">{% block footer_link %}No account? <a href="{% url 'register' %}" class="text-primary">Create one</a>{% endblock %}</p>
+    </div>
+</div>
+{% endblock %}

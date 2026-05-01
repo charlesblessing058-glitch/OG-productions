@@ -1,0 +1,617 @@
+﻿{% extends "base.html" %}
+{% block title %}Home - Original Grand Productions{% endblock %}
+
+{% block content %}
+
+<!-- ==================== HERO SECTION ==================== -->
+<section class="relative overflow-hidden bg-gradient-to-br from-primary via-secondary to-indigo-700 text-white py-24 lg:py-32">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-400/10 rounded-full blur-3xl"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-8 animate-fade-in">
+            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            <span class="text-sm font-medium">Welcome to Original Grand Productions</span>
+        </div>
+        
+        <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight animate-slide-up">
+            Professional Creative Services
+            <br />
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-purple-200">Delivered with Excellence</span>
+        </h1>
+        
+        <p class="text-lg md:text-xl text-blue-100 mb-10 max-w-2xl mx-auto leading-relaxed animate-slide-up" style="animation-delay: 0.1s;">
+            High-quality graphics, video editing, branding, and digital solutions for creators and businesses. Let's bring your vision to life.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style="animation-delay: 0.2s;">
+            <a href="#services" class="group px-8 py-4 bg-white text-primary font-semibold rounded-2xl hover:bg-gray-50 transition-all duration-300 shadow-2xl shadow-black/20 flex items-center justify-center gap-2">
+                Get Started Free
+                <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            </a>
+            <a href="#portfolio" class="group px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-semibold rounded-2xl hover:bg-white/20 transition-all duration-300 flex items-center justify-center gap-2">
+                <i class="fas fa-play-circle"></i>
+                View Our Work
+            </a>
+        </div>
+        
+        <!-- Trust Indicators -->
+        <div class="mt-16 grid grid-cols-3 gap-8 max-w-2xl mx-auto animate-fade-in" style="animation-delay: 0.4s;">
+            <div class="text-center">
+                <div class="text-3xl font-bold">500+</div>
+                <div class="text-sm text-blue-200">Projects Done</div>
+            </div>
+            <div class="text-center border-x border-white/20">
+                <div class="text-3xl font-bold">98%</div>
+                <div class="text-sm text-blue-200">Satisfaction</div>
+            </div>
+            <div class="text-center">
+                <div class="text-3xl font-bold">24/7</div>
+                <div class="text-sm text-blue-200">Support</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SERVICES SECTION ==================== -->
+<section id="services" class="py-20 bg-white dark:bg-dark">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">What We Offer</span>
+            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Our Services</h2>
+            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">Professional creative solutions tailored to your needs</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for s in services %}
+            <div class="group bg-white dark:bg-card rounded-3xl p-8 border border-gray-100 dark:border-gray-700 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 card-hover relative overflow-hidden">
+                <!-- Gradient Overlay on Hover -->
+                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                <div class="relative">
+                    <div class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-white text-2xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-lg shadow-primary/25">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">{{ s.name }}</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">{{ s.description|truncatewords:20 }}</p>
+                    
+                    <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-gray-700">
+                        <div>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">Starting at</span>
+                            <div class="text-3xl font-bold text-primary">KES {{ s.price }}</div>
+                        </div>
+                        <button type="button" onclick="openRequestModal({{ s.id }}, '{{ s.name|escapejs }}', {{ s.price }})" class="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 transform hover:-translate-y-0.5">
+                            Request Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-16 bg-gray-50 dark:bg-card rounded-3xl border-2 border-dashed border-gray-200 dark:border-gray-700">
+                <i class="fas fa-layer-group text-5xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                <p class="text-gray-500 dark:text-gray-400 text-lg">No services available yet. Check back soon!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ==================== ABOUT SECTION ==================== -->
+<section id="about" class="py-20 bg-gradient-to-br from-gray-50 to-white dark:from-dark dark:to-card relative overflow-hidden">
+    <!-- Decorative Elements -->
+    <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <!-- Left: Text Content -->
+            <div class="order-2 lg:order-1">
+                <span class="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-6">Who We Are</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+                    {{ site_settings.about_title|default:"About Original Grand Productions" }}
+                </h2>
+                
+                <div class="prose prose-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
+                    {{ site_settings.about_content|default:"OG Production is a dynamic creative and event solutions company dedicated to bringing ideas to life through innovation, style, and precision. We specialize in graphic design, videography, and event management, offering both online and offline services tailored to meet the unique needs of individuals, brands, and businesses. At OG Production, creativity meets professionalism."|linebreaksbr }}
+                </div>
+                
+                <!-- Feature List -->
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="flex items-center gap-3 p-4 bg-white dark:bg-card rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center text-green-600">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <span class="font-medium text-gray-900 dark:text-white text-sm">Quality Guaranteed</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-4 bg-white dark:bg-card rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-blue-600">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <span class="font-medium text-gray-900 dark:text-white text-sm">Fast Delivery</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-4 bg-white dark:bg-card rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center text-purple-600">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <span class="font-medium text-gray-900 dark:text-white text-sm">24/7 Support</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-4 bg-white dark:bg-card rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div class="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center text-amber-600">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <span class="font-medium text-gray-900 dark:text-white text-sm">Secure Payments</span>
+                    </div>
+                </div>
+                
+                <!-- Stats -->
+                <div class="flex gap-6">
+                    <div class="text-center p-6 bg-white dark:bg-card rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 min-w-[120px]">
+                        <div class="text-3xl font-bold text-primary">500+</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Projects</div>
+                    </div>
+                    <div class="text-center p-6 bg-white dark:bg-card rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 min-w-[120px]">
+                        <div class="text-3xl font-bold text-secondary">98%</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Satisfaction</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right: Image/Logo -->
+            <div class="order-1 lg:order-2">
+                <div class="relative">
+                    <!-- Decorative Ring -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary to-secondary rounded-3xl rotate-3 opacity-20"></div>
+                    
+                    <div class="relative bg-white dark:bg-card p-12 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700 flex items-center justify-center min-h-[400px]">
+                        {% if site_settings.logo %}
+                            <img src="{{ site_settings.logo.url }}" alt="OG Productions Logo" class="w-48 h-48 object-contain drop-shadow-2xl">
+                        {% else %}
+                            <div class="w-48 h-48 bg-gradient-to-br from-primary to-secondary rounded-3xl flex items-center justify-center text-white text-6xl font-bold shadow-2xl shadow-primary/50">
+                                OG
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Floating Badge -->
+                    <div class="absolute -bottom-6 -left-6 bg-white dark:bg-card px-6 py-4 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 flex items-center gap-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center text-white text-xl">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-900 dark:text-white">Trusted</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">By 500+ Clients</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== PORTFOLIO SECTION ==================== -->
+{% if portfolio %}
+<section id="portfolio" class="py-20 bg-white dark:bg-dark">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="inline-block px-4 py-1.5 bg-secondary/10 text-secondary rounded-full text-sm font-semibold mb-4">Our Work</span>
+            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Past Projects</h2>
+            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">Browse through our completed projects and see what we can do for you</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for item in portfolio %}
+            <div class="group bg-white dark:bg-card rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 card-hover">
+                <div class="relative overflow-hidden h-56">
+                    {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-5xl">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    {% endif %}
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        <span class="text-white font-semibold flex items-center gap-2">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <span class="text-xs font-semibold text-secondary bg-secondary/10 px-3 py-1 rounded-full">{{ item.category }}</span>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mt-3 mb-2">{{ item.title }}</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">{{ item.description|truncatewords:20 }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ==================== MY REQUESTS SECTION ==================== -->
+{% if my_requests %}
+<section class="py-20 bg-gradient-to-br from-gray-50 to-white dark:from-dark dark:to-card">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <span class="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">Your Dashboard</span>
+            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">📋 My Requests</h2>
+            <p class="text-gray-600 dark:text-gray-400">Track the status of your service requests</p>
+        </div>
+        
+        <div class="bg-white dark:bg-card rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50 dark:bg-gray-800/50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Service</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Payment</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Delivery</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                        {% for r in my_requests %}
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                            <td class="px-6 py-4">
+                                <div class="font-semibold text-gray-900 dark:text-white">{{ r.service.name }}</div>
+                                {% if r.admin_notes %}
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mt-1"><i class="fas fa-comment text-primary mr-1"></i> {{ r.admin_notes|truncatewords:8 }}</div>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1.5 text-xs font-semibold rounded-full {% if r.status == 'completed' %}bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400{% elif r.status == 'processing' %}bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400{% else %}bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400{% endif %}">
+                                    <i class="fas {% if r.status == 'completed' %}fa-check-circle{% elif r.status == 'processing' %}fa-spinner fa-spin{% else %}fa-clock{% endif %} mr-1"></i>
+                                    {{ r.status|title }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1.5 text-xs font-semibold rounded-full {% if r.payment_status == 'paid' %}bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400{% else %}bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400{% endif %}">
+                                    {{ r.payment_status|title }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                {{ r.created_at|date:"M d, Y" }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {% if r.delivery_link %}
+                                <a href="{{ r.delivery_link }}" target="_blank" class="text-primary hover:underline font-medium flex items-center gap-1">
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                                {% else %}
+                                <span class="text-gray-400 text-sm">—</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ==================== CONTACT SECTION ==================== -->
+<section id="contact" class="py-20 bg-white dark:bg-dark">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <!-- Left: Info -->
+            <div>
+                <span class="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-6">Get In Touch</span>
+                <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-6">Let's Start a Project</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg mb-10 leading-relaxed">Have a project in mind? Send us a message and we'll respond within 24 hours. We're excited to work with you!</p>
+                
+                <div class="space-y-6">
+                    <div class="flex items-center gap-5 p-5 bg-gray-50 dark:bg-card rounded-2xl border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                        <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-xl flex-shrink-0">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-900 dark:text-white">Email Us</p>
+                            <p class="text-gray-600 dark:text-gray-400">{{ site_settings.contact_email|default:"hello@originalgrand.com" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-5 p-5 bg-gray-50 dark:bg-card rounded-2xl border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                        <div class="w-14 h-14 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary text-xl flex-shrink-0">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-900 dark:text-white">Call Us</p>
+                            <p class="text-gray-600 dark:text-gray-400">{{ site_settings.contact_phone|default:"+254 700 000 000" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-5 p-5 bg-gray-50 dark:bg-card rounded-2xl border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                        <div class="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center text-green-600 text-xl flex-shrink-0">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-900 dark:text-white">Visit Us</p>
+                            <p class="text-gray-600 dark:text-gray-400">{{ site_settings.location|default:"Nairobi, Kenya" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right: Form -->
+            <div class="bg-gray-50 dark:bg-card p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700">
+                <form method="POST" action="{% url 'contact_submit' %}" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Your Name</label>
+                            <input type="text" name="name" placeholder="John Doe" required class="w-full px-4 py-3 bg-white dark:bg-dark border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+                            <input type="email" name="email" placeholder="john@example.com" required class="w-full px-4 py-3 bg-white dark:bg-dark border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Your Message</label>
+                        <textarea name="message" rows="5" placeholder="Tell us about your project..." required class="w-full px-4 py-3 bg-white dark:bg-dark border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition resize-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full px-6 py-4 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== REQUEST MODAL ==================== -->
+<div id="requestModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-card rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700 animate-slide-up">
+        <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Request Service</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="modalServiceName"></p>
+            </div>
+            <button onclick="closeRequestModal()" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center transition">
+                <i class="fas fa-times text-gray-600 dark:text-gray-300"></i>
+            </button>
+        </div>
+
+        <form method="POST" action="{% url 'submit_request' %}" id="requestForm" class="p-6">
+            {% csrf_token %}
+            <input type="hidden" name="service_id" id="modal_service_id">
+            <input type="hidden" name="amount" id="modal_amount">
+
+            <!-- Step 1: Details -->
+            <div id="step1" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
+                    <input type="text" name="client_name" value="{{ user.get_full_name }}" required class="w-full px-4 py-3 bg-gray-50 dark:bg-dark border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                    <input type="email" name="client_email" value="{{ user.email }}" required class="w-full px-4 py-3 bg-gray-50 dark:bg-dark border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Phone Number</label>
+                    <input type="tel" name="client_phone" placeholder="+254 7XX XXX XXX" required class="w-full px-4 py-3 bg-gray-50 dark:bg-dark border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Special Instructions (Optional)</label>
+                    <textarea name="notes" rows="2" placeholder="Any specific requirements?" class="w-full px-4 py-3 bg-gray-50 dark:bg-dark border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent resize-none"></textarea>
+                </div>
+                <button type="button" onclick="goToStep(2)" class="w-full py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/30 transition flex items-center justify-center gap-2">
+                    Next: Choose Payment <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- Step 2: Payment -->
+            <div id="step2" class="space-y-5 hidden">
+                <div class="p-4 bg-primary/5 dark:bg-primary/10 rounded-2xl border border-primary/20">
+                    <div class="flex justify-between items-center">
+                        <span class="font-semibold text-gray-900 dark:text-white">Service:</span>
+                        <span class="text-primary font-bold" id="modalServiceTitle"></span>
+                    </div>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="font-semibold text-gray-900 dark:text-white">Amount:</span>
+                        <span class="text-primary font-bold text-xl">KES <span id="modalPrice"></span></span>
+                    </div>
+                </div>
+                
+                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Select Payment Method:</p>
+                <div class="space-y-3">
+                    <label class="flex items-center p-4 border-2 border-gray-200 dark:border-gray-600 rounded-2xl cursor-pointer hover:border-primary dark:hover:border-primary transition group">
+                        <input type="radio" name="payment_method" value="mpesa" checked onchange="togglePaymentDetails('mpesa')" class="w-5 h-5 text-primary">
+                        <div class="ml-4 flex-1">
+                            <span class="font-semibold text-gray-900 dark:text-white group-hover:text-primary transition">M-Pesa</span>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Instant STK Push to your phone</p>
+                        </div>
+                        <i class="fas fa-mobile-alt text-green-600 text-2xl"></i>
+                    </label>
+                    
+                    <div id="mpesa-details" class="ml-2 p-4 bg-green-50 dark:bg-green-900/20 rounded-2xl border border-green-200 dark:border-green-800">
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">M-Pesa Phone Number</label>
+                        <input type="tel" id="mpesa_phone" name="mpesa_phone" placeholder="2547XXXXXXXX" class="w-full px-4 py-3 bg-white dark:bg-dark border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+                    
+                    <label class="flex items-center p-4 border-2 border-gray-200 dark:border-gray-600 rounded-2xl cursor-pointer hover:border-primary dark:hover:border-primary transition group">
+                        <input type="radio" name="payment_method" value="cash" onchange="togglePaymentDetails('cash')" class="w-5 h-5 text-primary">
+                        <div class="ml-4 flex-1">
+                            <span class="font-semibold text-gray-900 dark:text-white group-hover:text-primary transition">Cash on Delivery</span>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Pay when service is delivered</p>
+                        </div>
+                        <i class="fas fa-money-bill-wave text-green-600 text-2xl"></i>
+                    </label>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="goToStep(1)" class="flex-1 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold transition">
+                        <i class="fas fa-arrow-left mr-2"></i>Back
+                    </button>
+                    <button type="button" onclick="submitRequestWithPayment()" class="flex-1 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-green-500/30 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-check-circle"></i> Confirm & Pay
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ==================== M-PESA WAITING MODAL ==================== -->
+<div id="mpesaWaitingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-card rounded-3xl shadow-2xl w-full max-w-md p-10 text-center border border-gray-200 dark:border-gray-700 animate-slide-up">
+        <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/30 animate-bounce">
+            <i class="fas fa-mobile-alt text-4xl text-white"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Check Your Phone</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">Enter your M-Pesa PIN to complete the payment.</p>
+        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-4 overflow-hidden">
+            <div class="bg-gradient-to-r from-green-400 to-emerald-500 h-3 rounded-full animate-pulse w-full"></div>
+        </div>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Waiting for confirmation...</p>
+    </div>
+</div>
+
+<!-- ==================== SUCCESS MODAL ==================== -->
+<div id="successModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-card rounded-3xl shadow-2xl w-full max-w-md p-10 text-center border border-gray-200 dark:border-gray-700 animate-slide-up">
+        <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/30">
+            <i class="fas fa-check text-4xl text-white"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Payment Successful!</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-2">Your request has been confirmed.</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">Receipt: <span id="receiptNumber" class="font-mono font-semibold text-primary">Processing...</span></p>
+        <button onclick="document.getElementById('successModal').classList.add('hidden'); window.location.reload();" class="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-green-500/30 transition">
+            View My Requests
+        </button>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ===== REQUEST MODAL FUNCTIONS =====
+function openRequestModal(id, name, price) {
+    document.getElementById('modal_service_id').value = id;
+    document.getElementById('modal_amount').value = price;
+    document.getElementById('modalServiceName').textContent = name;
+    document.getElementById('modalServiceTitle').textContent = name;
+    document.getElementById('modalPrice').textContent = price;
+    document.getElementById('requestModal').classList.remove('hidden');
+    document.getElementById('requestModal').classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    goToStep(1);
+}
+
+function closeRequestModal() {
+    document.getElementById('requestModal').classList.add('hidden');
+    document.getElementById('requestModal').classList.remove('flex');
+    document.body.style.overflow = '';
+}
+
+function goToStep(step) {
+    document.getElementById('step1').classList.toggle('hidden', step !== 1);
+    document.getElementById('step2').classList.toggle('hidden', step !== 2);
+}
+
+function togglePaymentDetails(method) {
+    const mpesaDetails = document.getElementById('mpesa-details');
+    if (method === 'mpesa') {
+        mpesaDetails.classList.remove('hidden');
+        document.getElementById('mpesa_phone').required = true;
+    } else {
+        mpesaDetails.classList.add('hidden');
+        document.getElementById('mpesa_phone').required = false;
+    }
+}
+
+// Close modal on outside click
+document.getElementById('requestModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeRequestModal();
+});
+
+// ===== PAYMENT SUBMISSION =====
+function submitRequestWithPayment() {
+    const form = document.getElementById('requestForm');
+    const formData = new FormData(form);
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+    const phone = document.getElementById('mpesa_phone')?.value;
+
+    // Step 1: Submit Request
+    fetch('/request/submit/', {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-CSRFToken': csrfToken, 'Accept': 'application/json' }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            closeRequestModal();
+            if (paymentMethod === 'mpesa' && phone) {
+                initiateMpesa(data.request_id, phone, csrfToken);
+            } else {
+                showSuccessModal('Request submitted!');
+            }
+        } else {
+            alert('❌ ' + (data.message || 'Failed to submit'));
+        }
+    })
+    .catch(err => alert('❌ Error submitting request.'));
+}
+
+function initiateMpesa(requestId, phone, csrfToken) {
+    const data = new FormData();
+    data.append('phone', phone);
+    data.append('csrfmiddlewaretoken', csrfToken);
+
+    fetch('/payment/mpesa/' + requestId + '/', {
+        method: 'POST', body: data, headers: { 'X-CSRFToken': csrfToken, 'Accept': 'application/json' }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            showMpesaWaiting(requestId);
+        } else {
+            alert('❌ ' + (data.message || 'M-Pesa failed'));
+        }
+    })
+    .catch(() => alert(' M-Pesa failed'));
+}
+
+function showMpesaWaiting(requestId) {
+    const modal = document.getElementById('mpesaWaitingModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    const check = setInterval(() => {
+        fetch('/payment/status/' + requestId + '/')
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'paid') {
+                    clearInterval(check);
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    showSuccessModal(data.receipt || 'Test_' + Date.now());
+                } else if (data.status === 'failed') {
+                    clearInterval(check);
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    alert('❌ Payment failed.');
+                }
+            });
+    }, 3000);
+}
+
+function showSuccessModal(receipt) {
+    document.getElementById('receiptNumber').textContent = receipt;
+    const modal = document.getElementById('successModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+</script>
+{% endblock %}

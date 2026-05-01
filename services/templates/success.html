@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Success - OG Productions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5 text-center">
+    <div class="card mx-auto shadow" style="max-width: 400px;">
+        <div class="card-body p-5">
+            <h2 class="text-success mb-3">✅ Request Received!</h2>
+            <p class="mb-1">Request ID: <strong>{{ request.id }}</strong></p>
+            <p class="mb-1">Service: <strong>{{ request.service.name }}</strong></p>
+            <p class="mb-4">Status: <span class="badge bg-warning text-dark">{{ request.status|upper }}</span></p>
+            <a href="/" class="btn btn-primary">Back to Home</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

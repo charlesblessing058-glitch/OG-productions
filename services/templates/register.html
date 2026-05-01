@@ -1,0 +1,100 @@
+﻿{% extends "base.html" %}
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-lg">
+        <!-- Header -->
+        <div class="text-center">
+            <div class="flex justify-center mb-4">
+                {% if site_settings and site_settings.logo %}
+                    <img src="{{ site_settings.logo.url }}" alt="Logo" class="h-12 w-auto">
+                {% else %}
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">OG</div>
+                {% endif %}
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900">Create Account</h2>
+            <p class="mt-2 text-sm text-gray-600">Join OG Productions today</p>
+        </div>
+
+        <!-- Form -->
+        <form method="POST" class="mt-8 space-y-6">
+                        {% if form.errors %}
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                <p class="font-medium">Please correct the errors below:</p>
+                <ul class="mt-2 space-y-1 text-sm">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>• {{ field }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            {% csrf_token %}
+            
+            <div class="space-y-4">
+                <!-- Name Fields -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="id_first_name" class="block text-sm font-medium text-gray-700">First Name *</label>
+                        <input type="text" name="first_name" id="id_first_name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="id_last_name" class="block text-sm font-medium text-gray-700">Last Name *</label>
+                        <input type="text" name="last_name" id="id_last_name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+
+                <!-- Username -->
+                <div>
+                    <label for="id_username" class="block text-sm font-medium text-gray-700">Username *</label>
+                    <input type="text" name="username" id="id_username" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="id_email" class="block text-sm font-medium text-gray-700">Email Address *</label>
+                    <input type="email" name="email" id="id_email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Phone -->
+                <div>
+                    <label for="id_phone" class="block text-sm font-medium text-gray-700">Phone Number *</label>
+                    <input type="tel" name="phone" id="id_phone" placeholder="+254 7XX XXX XXX" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="id_password1" class="block text-sm font-medium text-gray-700">Password *</label>
+                    <input type="password" name="password1" id="id_password1" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Confirm Password -->
+                <div>
+                    <label for="id_password2" class="block text-sm font-medium text-gray-700">Confirm Password *</label>
+                    <input type="password" name="password2" id="id_password2" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium transition">
+                Create Account
+            </button>
+        </form>
+
+        <!-- Footer Links -->
+        <div class="text-center space-y-3">
+            <p class="text-sm text-gray-600">
+                Already have an account? 
+                <a href="{% url 'login' %}" class="font-medium text-blue-600 hover:text-blue-500">Login here</a>
+            </p>
+            <p class="text-xs text-gray-500">
+                <a href="{% url 'home' %}" class="hover:text-gray-700">← Back to Home</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

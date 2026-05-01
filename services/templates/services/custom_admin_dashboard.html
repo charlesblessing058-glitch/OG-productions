@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OG Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#2563eb'}}}}</script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">🎬 OG Admin Dashboard</h1>
+            <a href="/logout/" class="text-sm text-red-600">Logout</a>
+        </div>
+    </header>
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm"><p class="text-sm text-gray-500">Services</p><p class="text-2xl font-bold text-blue-600">{{ total_services }}</p></div>
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm"><p class="text-sm text-gray-500">Active</p><p class="text-2xl font-bold text-yellow-600">{{ active_requests }}</p></div>
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm"><p class="text-sm text-gray-500">Done</p><p class="text-2xl font-bold text-green-600">{{ completed_requests }}</p></div>
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm"><p class="text-sm text-gray-500">Revenue</p><p class="text-2xl font-bold text-purple-600">KES {{ total_revenue|floatformat:0 }}</p></div>
+        </div>
+        <!-- Tabs -->
+        <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6 gap-4">
+            <button onclick="showTab('services')" class="tab-btn px-4 py-2 font-medium text-primary border-b-2 border-primary" data-tab="services">🎬 Services</button>
+            <button onclick="showTab('requests')" class="tab-btn px-4 py-2 font-medium text-gray-500" data-tab="requests">📋 Requests</button>
+            <button onclick="showTab('users')" class="tab-btn px-4 py-2 font-medium text-gray-500" data-tab="users">👥 Users</button>
+            <button onclick="showTab('settings')" class="tab-btn px-4 py-2 font-medium text-gray-500" data-tab="settings">⚙️ Settings</button>
+        </div>
+        <!-- SERVICES -->
+        <div id="services" class="tab-content">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+                <table class="w-full"><thead class="bg-gray-50 dark:bg-gray-700"><tr><th class="px-4 py-2 text-left text-xs uppercase">Name</th><th class="px-4 py-2 text-left text-xs uppercase">Price</th></tr></thead>
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">{% for s in services %}<tr class="hover:bg-gray-50 dark:hover:bg-gray-700"><td class="px-4 py-2 font-medium">{{ s.name }}</td><td class="px-4 py-2">KES {{ s.price }}</td></tr>{% endfor %}</tbody></table>
+            </div>
+        </div>
+        <!-- REQUESTS -->
+        <div id="requests" class="tab-content hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-x-auto">
+                <table class="w-full"><thead class="bg-gray-50 dark:bg-gray-700"><tr><th class="px-3 py-2 text-left text-xs uppercase">Client</th><th class="px-3 py-2 text-left text-xs uppercase">Service</th><th class="px-3 py-2 text-left text-xs uppercase">Status</th><th class="px-3 py-2 text-left text-xs uppercase">Payment</th><th class="px-3 py-2 text-left text-xs uppercase">Date</th></tr></thead>
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">{% for r in requests %}<tr class="hover:bg-gray-50 dark:hover:bg-gray-700"><td class="px-3 py-2 text-sm">{{ r.user.get_full_name|default:r.client_name }}</td><td class="px-3 py-2 text-sm">{{ r.service.name }}</td><td class="px-3 py-2"><span class="px-2 py-0.5 text-xs rounded-full {% if r.status == 'completed' %}bg-green-100 text-green-800{% elif r.status == 'processing' %}bg-yellow-100 text-yellow-800{% else %}bg-blue-100 text-blue-800{% endif %}">{{ r.status }}</span></td><td class="px-3 py-2"><span class="px-2 py-0.5 text-xs rounded-full {% if r.payment_status == 'paid' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">{{ r.payment_status }}</span></td><td class="px-3 py-2 text-xs text-gray-500">{{ r.created_at|date:"M d" }}</td></tr>{% endfor %}</tbody></table>
+            </div>
+        </div>
+        <!-- USERS -->
+        <div id="users" class="tab-content hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+                <table class="w-full"><thead class="bg-gray-50 dark:bg-gray-700"><tr><th class="px-4 py-2 text-left text-xs uppercase">Name</th><th class="px-4 py-2 text-left text-xs uppercase">Email</th><th class="px-4 py-2 text-left text-xs uppercase">Joined</th></tr></thead>
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">{% for u in users %}<tr class="hover:bg-gray-50 dark:hover:bg-gray-700"><td class="px-4 py-2 font-medium">{{ u.get_full_name|default:u.username }}</td><td class="px-4 py-2 text-gray-500">{{ u.email }}</td><td class="px-4 py-2 text-gray-500 text-sm">{{ u.date_joined|date:"M d, Y" }}</td></tr>{% endfor %}</tbody></table>
+            </div>
+        </div>
+        <!-- SETTINGS -->
+        <div id="settings" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Logo Upload -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm">
+                    <h2 class="font-bold mb-4">🖼️ Brand Logo</h2>
+                    <form method="POST" action="{% url 'update_site_settings' %}" enctype="multipart/form-data" class="space-y-4">
+                        {% csrf_token %}
+                        <input type="text" name="site_name" value="{{ site_settings.site_name }}" placeholder="Site Name" class="w-full border p-2 rounded dark:bg-gray-700 dark:border-gray-600">
+                        <input type="file" name="logo" accept="image/*" class="w-full text-sm dark:text-gray-300">
+                        <button type="submit" class="bg-primary text-white px-4 py-2 rounded hover:bg-blue-700">Save Brand</button>
+                    </form>
+                </div>
+                <!-- Navigation -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm">
+                    <h2 class="font-bold mb-4">🔗 Navigation</h2>
+                    <form method="POST" action="{% url 'add_navigation_item' %}" class="space-y-4">
+                        {% csrf_token %}
+                        <select name="label" class="w-full border p-2 rounded dark:bg-gray-700 dark:border-gray-600"><option value="about">About</option><option value="contact">Contact</option><option value="blogs">Blogs</option></select>
+                        <input type="text" name="url" placeholder="#about" class="w-full border p-2 rounded dark:bg-gray-700 dark:border-gray-600" required>
+                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Add Link</button>
+                    </form>
+                    <div class="mt-4 space-y-2">
+                        {% for item in nav_items %}
+                        <div class="flex justify-between items-center p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                            <span>{{ item.get_display_text }} → {{ item.url }}</span>
+                            <a href="{% url 'delete_navigation_item' item.id %}" class="text-red-600 text-sm" onclick="return confirm('Delete?')">Delete</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showTab(id){document.querySelectorAll('.tab-content').forEach(t=>t.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.remove('text-primary','border-b-2','border-primary');b.classList.add('text-gray-500')});var a=document.querySelector('[data-tab="'+id+'"]');if(a){a.classList.add('text-primary','border-b-2','border-primary');a.classList.remove('text-gray-500')}}
+    </script>
+</body>
+</html>

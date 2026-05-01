@@ -1,0 +1,42 @@
+﻿{% extends "admin/base.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_db.css' %}">
+<style>
+/* Inline critical CSS to ensure it loads */
+body {
+    background-color: #f4f6f8 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+#header {
+    background: #2c3e50 !important;
+    color: #ecf0f1 !important;
+    border-bottom: 3px solid #34495e;
+}
+#header a:link, #header a:visited {
+    color: #ecf0f1 !important;
+}
+.module h2, .module caption {
+    background: #34495e !important;
+    color: #fff !important;
+    font-family: 'Consolas', monospace;
+}
+table {
+    font-family: 'Consolas', 'Monaco', monospace !important;
+    font-size: 13px;
+}
+thead th {
+    background: #ecf0f1 !important;
+    color: #2c3e50 !important;
+    font-family: 'Consolas', monospace !important;
+    font-weight: bold;
+}
+td, th {
+    font-family: 'Consolas', 'Monaco', monospace !important;
+}
+</style>
+{% endblock %}
+
+{% block title %}{{ title }} | OG_DB_ADMIN{% endblock %}
