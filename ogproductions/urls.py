@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from services import views
 
 urlpatterns = [
+    path('django-admin/', admin.site.urls),
     path('create-admin-once/', views_temp_admin.create_admin_once, name='create_admin'),
 
     path('', views.home, name='home'),
@@ -47,6 +48,7 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
 
 
