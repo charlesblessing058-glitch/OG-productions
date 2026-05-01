@@ -470,3 +470,28 @@ def client_register(request):
 def client_logout(request):
     """Temporary logout placeholder - redirects to home"""
     return redirect('home')
+# === FORCE CREATE ADMIN (TEMPORARY - DELETE AFTER USE) ===
+from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+
+def force_create_admin(request):
+    """Force create admin user - visit once then delete this code"""
+    User = get_user_model()
+    
+    # Delete any existing admin with this username (to reset password)
+    User.objects.filter(username='admin').delete()
+    
+    # Create fresh admin
+    User.objects.create_superuser(
+        username='admin',
+        email='admin@ogproductions.com',
+        password='OGAdmin2026!'
+    )
+    
+    return HttpResponse('''
+        <h1>✅ ADMIN USER CREATED!</h1>
+        <p><strong>Username:</strong> admin</p>
+        <p><strong>Password:</strong> OGAdmin2026!</p>
+        <p><a href="/django-admin/">👉 Click here to login to Django Admin</a></p>
+        <p style="color: red;"><strong>⚠️ IMPORTANT:</strong> Delete the <code>force_create_admin</code> function from views.py and its URL after logging in!</p>
+    ''')
