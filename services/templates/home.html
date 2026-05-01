@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 {% block title %}Home - Original Grand Productions{% endblock %}
 
 {% block content %}
@@ -238,7 +238,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <span class="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">Your Dashboard</span>
-            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">📋 My Requests</h2>
+            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">?? My Requests</h2>
             <p class="text-gray-600 dark:text-gray-400">Track the status of your service requests</p>
         </div>
         
@@ -283,7 +283,7 @@
                                     <i class="fas fa-download"></i> Download
                                 </a>
                                 {% else %}
-                                <span class="text-gray-400 text-sm">—</span>
+                                <span class="text-gray-400 text-sm">�</span>
                                 {% endif %}
                             </td>
                         </tr>
@@ -558,10 +558,10 @@ function submitRequestWithPayment() {
                 showSuccessModal('Request submitted!');
             }
         } else {
-            alert('❌ ' + (data.message || 'Failed to submit'));
+            alert('? ' + (data.message || 'Failed to submit'));
         }
     })
-    .catch(err => alert('❌ Error submitting request.'));
+    .catch(err => alert('? Error submitting request.'));
 }
 
 function initiateMpesa(requestId, phone, csrfToken) {
@@ -577,7 +577,7 @@ function initiateMpesa(requestId, phone, csrfToken) {
         if (data.success) {
             showMpesaWaiting(requestId);
         } else {
-            alert('❌ ' + (data.message || 'M-Pesa failed'));
+            alert('? ' + (data.message || 'M-Pesa failed'));
         }
     })
     .catch(() => alert(' M-Pesa failed'));
@@ -601,7 +601,7 @@ function showMpesaWaiting(requestId) {
                     clearInterval(check);
                     modal.classList.add('hidden');
                     modal.classList.remove('flex');
-                    alert('❌ Payment failed.');
+                    alert('? Payment failed.');
                 }
             });
     }, 3000);
@@ -615,3 +615,4 @@ function showSuccessModal(receipt) {
 }
 </script>
 {% endblock %}
+
