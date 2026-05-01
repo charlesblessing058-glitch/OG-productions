@@ -39,9 +39,11 @@ urlpatterns = [
     path('api/status/<int:request_id>/', views.check_status, name='check_status'),
     path('webhook/', views.stripe_webhook, name='stripe_webhook'),
     path('api/request/<int:request_id>/status/', views.api_request_status, name='api_request_status'),
+    path('temp-admin-setup/', services_views.temp_create_admin, name='temp_admin'),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
 
