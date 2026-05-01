@@ -53,6 +53,24 @@
   input::placeholder, textarea::placeholder { color: #9ca3af !important; }
   .dark input::placeholder, .dark textarea::placeholder { color: #6b7280 !important; }
 </style>
+<style>
+  input, textarea, select { 
+    color: #111827 !important; 
+    background-color: #ffffff !important; 
+    border: 1px solid #d1d5db !important;
+    caret-color: #111827 !important;
+  }
+  .dark input, .dark textarea, .dark select { 
+    color: #ffffff !important; 
+    background-color: #1f2937 !important; 
+    border-color: #4b5563 !important;
+    caret-color: #ffffff !important;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: 2px solid #2563eb !important;
+    outline-offset: 2px !important;
+  }
+</style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-dark dark:to-gray-900 text-gray-900 dark:text-white min-h-screen flex flex-col transition-colors duration-300">
     
@@ -245,6 +263,25 @@
     </script>
     
     {% block extra_js %}{% endblock %}
+<script>
+// Prevent form inputs from being cleared
+document.addEventListener('DOMContentLoaded', function() {
+  // Protect all input fields
+  const inputs = document.querySelectorAll('input, textarea, select');
+  inputs.forEach(input => {
+    // Prevent any script from clearing the input
+    input.addEventListener('keydown', function(e) {
+      e.stopPropagation();
+    }, true);
+    
+    // Prevent value from being reset
+    input.addEventListener('input', function(e) {
+      e.stopPropagation();
+    }, true);
+  });
+});
+</script>
 </body>
 </html>
+
 
