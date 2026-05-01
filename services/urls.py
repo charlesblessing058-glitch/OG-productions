@@ -10,6 +10,5 @@ urlpatterns = [
     # Temporary auth placeholders (to satisfy template)
     path('login/', views.client_login, name='login'),
     path('register/', views.client_register, name='register'),
-    path('logout/', views.client_logout, name='logout'),
-        path('force-create-admin/', views.force_create_admin, name='force_create_admin'),
+    path('logout/', views.client_logout, name='logout')
 ]
