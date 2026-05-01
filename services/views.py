@@ -443,3 +443,16 @@ def delete_portfolio_item(request, item_id):
 
 
 
+
+# === TEMPORARY ADMIN CREATOR (DELETE AFTER USE) ===
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def temp_create_admin(request):
+    User = get_user_model()
+    if User.objects.filter(username='admin').exists():
+        return HttpResponse("✅ Admin already exists! Go to /login/ and sign in.")
+    User.objects.create_superuser('admin', 'admin@ogproductions.com', 'TempPass123!')
+    return HttpResponse("🎉 SUCCESS! Admin created.<br>Username: <b>admin</b><br>Password: <b>TempPass123!</b><br>⚠️ LOGIN NOW, THEN DELETE THIS TEMPORARY ROUTE FROM urls.py & views.py!")

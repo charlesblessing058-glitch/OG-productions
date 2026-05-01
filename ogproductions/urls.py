@@ -1,4 +1,5 @@
-﻿from django.contrib import admin
+﻿from services import views_temp_admin
+from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
@@ -6,6 +7,8 @@ from django.shortcuts import redirect
 from services import views
 
 urlpatterns = [
+    path('create-admin-once/', views_temp_admin.create_admin_once, name='create_admin'),
+
     path('', views.home, name='home'),
     path('login/', views.user_login, name='login'),
     path('register/', views.register, name='register'),
@@ -39,9 +42,12 @@ urlpatterns = [
     path('api/status/<int:request_id>/', views.check_status, name='check_status'),
     path('webhook/', views.stripe_webhook, name='stripe_webhook'),
     path('api/request/<int:request_id>/status/', views.api_request_status, name='api_request_status'),
+    path('temp-admin-setup/', services_views.temp_create_admin, name='temp_admin'),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
 
 
