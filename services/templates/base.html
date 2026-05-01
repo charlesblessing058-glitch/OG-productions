@@ -38,6 +38,21 @@
         .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
         .dark .card-hover:hover { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
     </style>
+<style>
+  /* Force visible text in all form inputs */
+  input, textarea, select { 
+    color: #111827 !important; 
+    background-color: #ffffff !important; 
+    border-color: #d1d5db !important;
+  }
+  .dark input, .dark textarea, .dark select { 
+    color: #ffffff !important; 
+    background-color: #1f2937 !important; 
+    border-color: #4b5563 !important;
+  }
+  input::placeholder, textarea::placeholder { color: #9ca3af !important; }
+  .dark input::placeholder, .dark textarea::placeholder { color: #6b7280 !important; }
+</style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-dark dark:to-gray-900 text-gray-900 dark:text-white min-h-screen flex flex-col transition-colors duration-300">
     
@@ -232,3 +247,4 @@
     {% block extra_js %}{% endblock %}
 </body>
 </html>
+
