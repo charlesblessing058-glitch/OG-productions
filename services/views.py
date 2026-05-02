@@ -495,3 +495,42 @@ def force_create_admin(request):
         <p><a href="/django-admin/">👉 Click here to login to Django Admin</a></p>
         <p style="color: red;"><strong>⚠️ IMPORTANT:</strong> Delete the <code>force_create_admin</code> function from views.py and its URL after logging in!</p>
     ''')
+    # === CREATE CHARLES ADMIN (TEMPORARY - DELETE AFTER USE) ===
+from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+
+def create_charles_admin(request):
+    """Create admin with charlesblessing058@gmail.com / namureng"""
+    User = get_user_model()
+    
+    # Use email as username (Django allows this)
+    username = 'charlesblessing058@gmail.com'
+    email = 'charlesblessing058@gmail.com'
+    password = 'namureng'
+    
+    # Remove any existing user with this username/email
+    User.objects.filter(username=username).delete()
+    User.objects.filter(email=email).delete()
+    
+    # Create new superuser
+    user = User.objects.create_superuser(
+        username=username,
+        email=email,
+        password=password
+    )
+    
+    # Make sure user is active and staff
+    user.is_active = True
+    user.is_staff = True
+    user.save()
+    
+    return HttpResponse(f'''
+        <h1>✅ ADMIN CREATED!</h1>
+        <p><strong>Username:</strong> {username}</p>
+        <p><strong>Password:</strong> {password}</p>
+        <p><a href="/django-admin/" target="_blank">👉 Click here to login to Django Admin</a></p>
+        <p style="color: red; font-weight: bold;">
+            ⚠️ DELETE the <code>create_charles_admin</code> function from views.py 
+            and its URL after logging in!
+        </p>
+    ''')
